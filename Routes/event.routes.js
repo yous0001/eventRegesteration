@@ -7,6 +7,6 @@ const router=Router()
 
 router.post("/create",authMiddleware([systemRoles.admin]),eventController.createEvent)
 router.put("/update/:eventId",authMiddleware([systemRoles.admin]),eventController.updateEvent)
-
+router.get("/",eventController.getEvents)
 
 export default router

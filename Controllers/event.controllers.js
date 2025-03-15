@@ -44,3 +44,12 @@ export const updateEvent = async (req, res) => {
             res.status(500).json({ message: "Server Error", error: error.message });
         }
 };
+
+export const getEvents = async (req, res) => {
+    try {
+        const events = await EventModel.find().populate("createdBy", "username email");
+        res.status(200).json({message:"Events fetched successfully",events});
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
