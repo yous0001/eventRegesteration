@@ -4,6 +4,7 @@ import * as  authController from "../Controllers/auth.contorller.js"
 const router=Router()
 
 router.post('/register',authController.register) 
+router.get('/verify-email',authController.verifyEmail) 
 
 
 export default router

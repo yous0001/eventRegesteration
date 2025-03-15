@@ -33,3 +33,22 @@ export const register=async(req, res, next) => {
         res.status(500).json({ message: 'internal server error' });
     }
 }
+
+export const verifyEmail=async(req, res, next) => {
+    try {
+        const { token } = req.query;
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET_VERFICATION);
+        const user = await UserModel.findOne({ email: decodedToken.email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        
+        user.isEmailVerified = true;
+        await user.save();
+        res.status(200).json({ message: 'Email verified successfully' });    
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'internal server error' });
+    }
+}
