@@ -14,3 +14,33 @@ export const createEvent=async(req, res, next) => {
         res.status(500).json({ message: 'internal server error' });
     }
 }
+
+
+export const updateEvent = async (req, res) => {
+        try {
+            const { title, description, date, location, capacity } = req.body;
+            
+            const event = await EventModel.findById(req.params.eventId);
+            if (!event) return res.status(404).json({ message: "Event not found" });
+        
+            if (event.createdBy.toString() !== req.user._id.toString()) {
+                return res.status(403).json({ message: "Unauthorized to update this event" });
+            }
+            
+            if(title)
+                event.title = title 
+            if(description)
+                event.description = description 
+            if(date)
+                event.date = date 
+            if(location)
+                event.location = location
+            if(capacity)
+                event.capacity = capacity
+        
+            await event.save();
+            res.status(200).json({ message: "Event updated successfully!", event });
+        } catch (error) {
+            res.status(500).json({ message: "Server Error", error: error.message });
+        }
+};
