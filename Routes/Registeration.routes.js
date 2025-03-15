@@ -9,5 +9,7 @@ const router=Router()
 router.post("/register/:eventId", authMiddleware(), RegiseterationController.register);
 router.delete("/cancelRegistration/:registrationId", authMiddleware(), RegiseterationController.cancelRegistration);
 router.get("/eventRegistrations/:eventId", authMiddleware([systemRoles.admin]), RegiseterationController.getRegistrationsByEvent);
+router.get("/userRegistrations", authMiddleware(), RegiseterationController.getRegistrationsByUser);
+
 
 export default router

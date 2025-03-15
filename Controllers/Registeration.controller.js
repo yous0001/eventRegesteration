@@ -86,3 +86,14 @@ export const getRegistrationsByEvent = async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
+export const getRegistrationsByUser = async (req, res) => {
+    try {
+        const { _id:userId } = req.user;
+
+        const registrations = await RegisterationModel.find({ user: userId }).populate("event");
+        res.status(200).json(registrations);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
