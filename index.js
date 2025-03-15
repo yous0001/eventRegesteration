@@ -3,6 +3,7 @@ import express from "express"
 import db_connection from "./DB/connection.js"
 import authRouter from "./Routes/auth.routes.js"
 import eventRouter from "./Routes/event.routes.js"
+
 config()
 const app = express()
 const port =process.env.PORT 

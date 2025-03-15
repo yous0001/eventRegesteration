@@ -34,7 +34,6 @@ export const authMiddleware = (accessRoles = [systemRoles.user, systemRoles.admi
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-
             if (!accessRoles.includes(user.role)) {
                 return res.status(403).json({ message: "Unauthorized access" });
             }
