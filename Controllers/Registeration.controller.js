@@ -50,3 +50,39 @@ export const register=async (req,res)=>{
         res.status(500).json({ message: 'internal server error' });
     }
 }
+
+export const cancelRegistration = async (req, res) => {
+    try {
+        const { registrationId } = req.params;
+
+        const registration = await RegisterationModel.findById(registrationId);
+        if (!registration) {
+            return res.status(404).json({ message: "Registration not found" });
+        }
+
+        if (registration.user.toString() !== req.user.id) {
+            return res.status(403).json({ message: "Unauthorized" });
+        }
+
+        await RegisterationModel.findByIdAndDelete(registrationId);
+
+        await EventModel.findByIdAndUpdate(registration.event, {
+            $pull: { registeredUsers: registration.user },
+        });
+
+        res.status(200).json({ message: "Registration canceled" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+export const getRegistrationsByEvent = async (req, res) => {
+    try {
+        const { eventId } = req.params;
+
+        const registrations = await RegisterationModel.find({ event: eventId }).populate("user");
+        res.status(200).json({message:`${registrations.length} registrations found`,registrations});
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
